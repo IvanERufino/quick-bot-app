@@ -24,16 +24,16 @@ export class SearchResultComponent {
   overView: string = 'Google Cloud Platform (GCP) is a suite of cloud computing services offered by Google. It provides a wide range of services, including computing, storage, databases, networking, analytics, machine learning, and more';
   serachResult : searchResult[] = [{
     icon: 'all_out',
-    title: 'text titel for description',
+    title: 'text title for description',
     description: 'text title fpr description text title fpr description text title fpr descriptiontext title fpr descriptiontext title fpr descriptiontext title fpr description'
   },
   {
     icon: 'all_out',
-    title: 'text titel for description',
+    title: 'text title for description',
     description: 'text title fpr description text title fpr description text title fpr descriptiontext title fpr descriptiontext title fpr descriptiontext title fpr description'
   }
 ];
-  
+
   constructor(private readonly route: ActivatedRoute){
     this.route.paramMap.subscribe((param:any)=>{
       this.query = param.get('query');

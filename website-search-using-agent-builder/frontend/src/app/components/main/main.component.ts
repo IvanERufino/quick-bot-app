@@ -1,18 +1,11 @@
-import { IntentService, IntentDetails, Model } from '../../services/intent.service';
-import { ModelsService } from 'src/app/services/models.service';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BroadcastService } from 'src/app/services/broadcast.service';
-import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { UserService } from 'src/app/services/user/user.service';
 import { Message } from 'src/app/models/messegeType.model';
 import { SessionService } from 'src/app/services/user/session.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ReplaySubject } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { animate, sequence, state, style, transition, trigger } from '@angular/animations';
 import { SpeechToTextService } from '../../services/speech-to-text';
-import { CreateIntentFormComponent } from '../create-intent-form/create-intent-form.component';
 
 @Component({
   selector: 'app-main',
@@ -35,67 +28,24 @@ import { CreateIntentFormComponent } from '../create-intent-form/create-intent-f
     ])
   ]
 })
-export class MainComponent {
+export class MainComponent implements OnInit {
   isRecording = false;
   transcribedText = '';
   mediaRecorder: MediaRecorder;
   audioChunks: Blob[] = [];
-
-  searchForm: UntypedFormGroup
-  selectedType: string = 'result';
   chatQuery: string = '';
-  chipSelected: string = '';
-  allQuestions: Map<string, string[]> = new Map()
-  onHover: boolean = false;
+
   savedUser;
-  lastExpandedElement: string = '';
-  showTos = false;
-  showBadge = false;
-  tooltipTextList: string[] = [];
-
-  @ViewChild('userBadgeTemplate', { static: true })
-  userBadgeTemplate!: TemplateRef<{}>;
-
-  intentSelected: boolean;
-  intents: IntentDetails[] = [];
-  dialogRef: any;
-
-  private readonly destroyed = new ReplaySubject<void>(1);
-  toolTipText: string | undefined;
-  tooltipTextTimeout: undefined | ReturnType<typeof setTimeout>;
-  models: Model[] = [];
-  createIntentComponentInstance:any;
 
 
   constructor(private router: Router,
     private broadcastService: BroadcastService,
-    private fb: UntypedFormBuilder,
     private sessionService: SessionService,
     public userService: UserService,
-    private intentsService: IntentService,
-    public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
     private speechToTextService: SpeechToTextService,
   ) {
-    this.intentsService.getAllIntent().subscribe(response => {
-      if(response.length > 0) this.intents = response;
-      else this.openCreateIntentForm();
-    });
-    this.searchForm = this.fb.group({
-      searchTerm: this.fb.control('')
-    });
     this.savedUser = userService.getUserDetails();
     this.sessionService.createSession();
-    this.setTimeoutForToolTipText();
-  }
-
-  openCreateIntentForm(){
-    this.createIntentComponentInstance = this.dialog.open(CreateIntentFormComponent,
-      { disableClose: true,
-        height: '600px',
-        width: '1120px'
-    });
-    this.createIntentComponentInstance.models = this.models;
   }
 
   navigate() {
@@ -105,21 +55,9 @@ export class MainComponent {
       shareable: false,
     }
     this.chatQuery && this.broadcastService.nextChatQuery(userMessage);
-    this.router.navigateByUrl('/' + this.selectedType);
+    this.router.navigateByUrl('/result');
   };
 
-  changeSelectedAssistance(assistantType: string) {
-    this.selectedType = assistantType;
-  }
-
-  chipControlOnSelect(intent: IntentDetails) {
-    let queryIntent = intent.name;
-    this.chipSelected = queryIntent;
-  }
-
-  removeIntentSelection() {
-    this.chipSelected = '';
-  }
 
   assignQToChatQuery(question: string) {
     this.chatQuery = question;
@@ -129,67 +67,7 @@ export class MainComponent {
       shareable: false,
     }
     this.chatQuery && this.broadcastService.nextChatQuery(userMessage);
-    this.router.navigateByUrl('/' + this.selectedType);
-  }
-
-  showFullButton() {
-    this.onHover = true;
-  }
-  hideFullButton() {
-    this.onHover = false;
-  }
-
-  expandIntentContainer(intent: IntentDetails) {
-    let classNameToFilterElement = intent.name;
-    this.chipControlOnSelect(intent);
-    if (this.lastExpandedElement != '') {
-      document.getElementsByClassName(this.lastExpandedElement)[0]?.classList.add('intent-container-box');
-      document.getElementsByClassName(this.lastExpandedElement)[0]?.classList.remove('selected-intent-box');
-      document.getElementsByClassName(this.lastExpandedElement + "_close_button_container")[0]?.classList.remove('expand-close-button-container')
-      document.getElementsByClassName(this.lastExpandedElement + "_suggested_questions_container")[0]?.classList.remove('selected-intent-suggested-question');
-    }
-    if (this.lastExpandedElement == classNameToFilterElement) {
-      document.getElementsByClassName(this.lastExpandedElement)[0]?.classList.remove('selected-intent-box');
-      document.getElementsByClassName(classNameToFilterElement + "_close_button_container")[0]?.classList.remove('expand-close-button-container')
-      document.getElementsByClassName(this.lastExpandedElement + "_suggested_questions_container")[0]?.classList.remove('selected-intent-suggested-question');
-      this.lastExpandedElement = '';
-      return;
-    }
-    this.lastExpandedElement = classNameToFilterElement;
-    const elementToExpand = document.getElementsByClassName(classNameToFilterElement);
-    elementToExpand[0]?.classList.remove('intent-container-box');
-    elementToExpand[0]?.classList.add('selected-intent-box');
-    const suggestedQuestionElement = document.getElementsByClassName(classNameToFilterElement + "_suggested_questions_container");
-    suggestedQuestionElement[0]?.classList.add('selected-intent-suggested-question');
-    const closeButtonElement = document.getElementsByClassName(classNameToFilterElement + "_close_button_container");
-    closeButtonElement[0]?.classList.add('expand-close-button-container');
-
-    setTimeout(() => { this.scrollToSelectedElement(classNameToFilterElement) }, 100);
-
-    return;
-  }
-
-  getHumanReadablestring(s: string) {
-    return s.replace("_", " ").replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
-  }
-
-  scrollToSelectedElement(classNameToFilterElement: string) {
-    const childElement = document.getElementById(classNameToFilterElement);
-    childElement?.scrollIntoView();
-  }
-
-  ngOnDestroy() {
-    this.destroyed.next();
-    this.destroyed.complete();
-  }
-
-  openSnackBar(message: string, color: string) {
-    this._snackBar.open(message, 'Close', {
-      panelClass: [color],
-      horizontalPosition: 'end',
-      verticalPosition: 'top',
-      duration: 3000,
-    });
+    this.router.navigateByUrl('/result');
   }
 
   ngOnInit() {
@@ -227,18 +105,4 @@ export class MainComponent {
       }
     );
   }
-
-  setTimeoutForToolTipText() {
-    if (!window.localStorage['showTooltip']) {
-      this.toolTipText = this.tooltipTextList[Math.floor(Math.random() * this.tooltipTextList.length)];
-      this.tooltipTextTimeout = setInterval(() => { this.toolTipText = this.tooltipTextList[Math.floor(Math.random() * this.tooltipTextList.length)]; }, 7000);
-    }
-  }
-
-  dismissToolTip() {
-    window.localStorage['showTooltip'] = true;
-    this.toolTipText = undefined;
-    clearTimeout(this.tooltipTextTimeout);
-  }
-
 }

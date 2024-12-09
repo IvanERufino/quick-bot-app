@@ -338,11 +338,6 @@ export class ChatbarComponent implements OnDestroy {
     }
   }
 
-  chipControlOnSelect(event: any) {
-    this.chatQuery = event.target.innerText;
-    this.submitMessage(event);
-  }
-
   getResponseforSuggestionQuery(event: any) {
     this.isSuggestedQuestion = event;
     this.chatQuery = event;
