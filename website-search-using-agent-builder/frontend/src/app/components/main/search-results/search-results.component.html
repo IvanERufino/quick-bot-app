@@ -16,14 +16,14 @@
   <div class="search-result-parent-container">
       <div class="search-result" *ngFor="let result of searchResults.results">
           <div class="title-container">
-              <mat-icon>{{result.derivedStructData.pagemap.cse_image[0].src}}</mat-icon>
-              {{result.derivedStructData.title}}
+              <mat-icon>{{result.document.derivedStructData.pagemap.cse_image[0].src}}</mat-icon>
+              {{result.document.derivedStructData.title}}
           </div>
           <div class="description-container">
-              {{result.derivedStructData.snippets[0].snippet}}
+              {{result.document.derivedStructData.snippets[0].snippet}}
           </div>
           <div class="overview-button">
-              <button (click)="navigateToLink(result.derivedStructData.link)" mat-button>View</button>
+              <button (click)="navigateToLink(result.document.derivedStructData.link)" mat-button>View</button>
           </div>
       </div>
   </div>

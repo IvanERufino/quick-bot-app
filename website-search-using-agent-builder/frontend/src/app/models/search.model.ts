@@ -4,8 +4,12 @@ export type SearchRequest = {
 
 export type SearchResponse = {
   summary: any
-  results: Document[]
+  results: SearchResult[]
   totalSize: number
+}
+
+export type SearchResult = {
+  document: Document
 }
 
 export type Document = {
