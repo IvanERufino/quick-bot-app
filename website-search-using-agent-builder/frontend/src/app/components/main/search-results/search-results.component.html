@@ -18,7 +18,7 @@
   <div class="search-result-parent-container">
       <div class="search-result" *ngFor="let result of searchResults.results">
           <div class="title-container">
-              <img [src]="result.document.derivedStructData.pagemap.cse_image[0].src" />
+              <img class="image-container" [src]="result.document.derivedStructData.pagemap.cse_image[0].src" />
               {{result.document.derivedStructData.title}}
           </div>
           <div class="description-container">

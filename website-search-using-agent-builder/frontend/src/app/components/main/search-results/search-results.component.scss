@@ -88,6 +88,10 @@
       color: #161A1D;
       display: flex;
       gap: 10px;
+
+      .image-container {
+        width: 50px;
+      }
   }
 
   .description-container {
