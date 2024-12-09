@@ -1,9 +1,11 @@
 <div class="overview-container">
   <div class="overview-sub-container">
       <div class="overview-text"><mat-icon>auto_awesome</mat-icon> AI Overview</div>
-      <div *ngIf="searchResults.summary" class="overview-content"> {{searchResults.summary}}</div>
-      <div class="overview-button">
-          <button mat-button>Learn more</button>
+      <div *ngIf="searchResults.summary.text">
+        <div class="overview-content"> {{searchResults.summary.text}}</div>
+        <div class="overview-button">
+            <button mat-button>Learn more</button>
+        </div>
       </div>
   </div>
 </div>
@@ -16,7 +18,7 @@
   <div class="search-result-parent-container">
       <div class="search-result" *ngFor="let result of searchResults.results">
           <div class="title-container">
-              <mat-icon>{{result.document.derivedStructData.pagemap.cse_image[0].src}}</mat-icon>
+              <img [src]="result.document.derivedStructData.pagemap.cse_image[0].src" />
               {{result.document.derivedStructData.title}}
           </div>
           <div class="description-container">

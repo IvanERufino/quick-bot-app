@@ -7,7 +7,6 @@ import { SearchResponse } from 'src/app/models/search.model';
   styleUrls: ['./search-results.component.scss']
 })
 export class SearchResultsComponent {
-
   summary: string = '';
   @Input() searchResults: SearchResponse
 

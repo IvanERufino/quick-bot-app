@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { UserService } from 'src/app/services/user/user.service';
-import { SessionService } from 'src/app/services/user/session.service';
 import { SearchService } from 'src/app/services/search.service';
 import { SearchResponse } from 'src/app/models/search.model';
 
@@ -25,6 +24,7 @@ export class MainComponent {
   searchTerm(term: string) {
     this.showResults = true;
     this.service.search(term).subscribe(response => {
+      console.log(response.summary)
       this.searchResults = response
     })
   };
