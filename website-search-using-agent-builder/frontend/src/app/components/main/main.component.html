@@ -13,6 +13,6 @@
       <app-chat-input (emitSearch)="searchTerm($event)"></app-chat-input>
     </div>
     <div class="search-results-outer"  *ngIf="this.showResults">
-      <app-search-results></app-search-results>
+      <app-search-results [searchResults]="searchResults"></app-search-results>
   </div>
 </div>

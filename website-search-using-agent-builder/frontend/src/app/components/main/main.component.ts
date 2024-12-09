@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UserService } from 'src/app/services/user/user.service';
 import { SessionService } from 'src/app/services/user/session.service';
 import { SearchService } from 'src/app/services/search.service';
+import { SearchResponse } from 'src/app/models/search.model';
 
 @Component({
   selector: 'app-main',
@@ -11,6 +12,7 @@ import { SearchService } from 'src/app/services/search.service';
 export class MainComponent {
   term: string = '';
   showResults: boolean = false;
+  searchResults: SearchResponse
   savedUser;
 
   constructor(
@@ -23,7 +25,7 @@ export class MainComponent {
   searchTerm(term: string) {
     this.showResults = true;
     this.service.search(term).subscribe(response => {
-      console.log(response);
+      this.searchResults = response
     })
   };
 }

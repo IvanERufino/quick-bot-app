@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { SearchResponse } from 'src/app/models/search.model';
 
 @Component({
   selector: 'app-search-results',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class SearchResultsComponent {
 
+  summary: string = '';
+  @Input() searchResults: SearchResponse
+
+  navigateToLink(link: string) {
+    window.open(link, "_blank")
+  }
 }

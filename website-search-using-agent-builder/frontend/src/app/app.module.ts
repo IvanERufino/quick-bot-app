@@ -54,7 +54,6 @@ import { ToastMessageComponent } from './components/shared/toast-message/toast-m
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
-import { SearchResultComponent } from './components/search-result/search-result.component';
 import { DisplayDetailedResultComponent } from './components/display-detailed-result/display-detailed-result.component';
 import { ChatInputComponent } from './components/main/chat-input/chat-input.component';
 import { SearchResultsComponent } from './components/main/search-results/search-results.component'
@@ -67,7 +66,6 @@ import { SearchResultsComponent } from './components/main/search-results/search-
     MainComponent,
     LoginComponent,
     ToastMessageComponent,
-    SearchResultComponent,
     DisplayDetailedResultComponent,
     ChatInputComponent,
     SearchResultsComponent
