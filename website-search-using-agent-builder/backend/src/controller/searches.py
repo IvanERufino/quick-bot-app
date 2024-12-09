@@ -24,8 +24,8 @@ def searchViaAgent(item):
     api_url = "https://discoveryengine.googleapis.com/v1alpha/projects/318457139342/locations/global/collections/default_collection/engines/robin-search-app-2_1733237288232/servingConfigs/default_search:search"
     token = get_token()
     headers = {
-        "Authorization": f"Bearer ya29.a0AeDClZC9GjyNll8Am2v7GhX7Q17UqOhgDA8LAzwTW8GaTiJbQ79FP4MAVlv2sCeaCEl3Av_Vyuak6nQxQuKzwAm47VMiQkV2gMBNhrL-1nJJRB4U7YwLJbDxvjX7OFQzXf9azLJi2SubWr7vQHetnbpxYk-D7Y-EE9xzRJGUQlRZyGVcaCgYKAUcSARESFQHGX2MiJDhkZxP7uR4PkbI3-QC5XA0183",
-        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
     }
 
     data = {
