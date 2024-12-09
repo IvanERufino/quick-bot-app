@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MainComponent } from './components/main/main.component';
-import { ChatComponent } from './components/main/chat/chat.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -20,7 +19,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ChatbarComponent } from './components/main/chat/chatbar/chatbar.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoginComponent } from './components/login/login.component';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -44,7 +42,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { SuggestionCardComponent } from './components/elements/suggestion-card/suggestion-card.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import {NgIdleModule} from '@ng-idle/core';
 import {ClipboardModule} from '@angular/cdk/clipboard';
@@ -55,12 +52,12 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers.js';
 import 'prismjs/plugins/line-highlight/prism-line-highlight.js';
 import { ToastMessageComponent } from './components/shared/toast-message/toast-message.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { DialogueBoxComponent } from './dialogue-box/dialogue-box.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
-import { CreateIntentFormComponent } from './components/create-intent-form/create-intent-form.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
-import { DisplayDetailedResultComponent } from './components/display-detailed-result/display-detailed-result.component'
+import { DisplayDetailedResultComponent } from './components/display-detailed-result/display-detailed-result.component';
+import { ChatInputComponent } from './components/main/chat-input/chat-input.component';
+import { SearchResultsComponent } from './components/main/search-results/search-results.component'
 
 @NgModule({
   declarations: [
@@ -68,15 +65,12 @@ import { DisplayDetailedResultComponent } from './components/display-detailed-re
     HeaderComponent,
     FooterComponent,
     MainComponent,
-    ChatComponent,
-    ChatbarComponent,
     LoginComponent,
-    SuggestionCardComponent,
     ToastMessageComponent,
-    DialogueBoxComponent,
-    CreateIntentFormComponent,
     SearchResultComponent,
-    DisplayDetailedResultComponent
+    DisplayDetailedResultComponent,
+    ChatInputComponent,
+    SearchResultsComponent
   ],
   imports: [
     BrowserModule,
