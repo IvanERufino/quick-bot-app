@@ -1,0 +1,76 @@
+<app-header (emitSearch)="this.searchTerm($event)"></app-header>
+<div class="overview-container" *ngIf="summary">
+  <div class="overview-sub-container">
+      <div class="overview-text"><mat-icon>auto_awesome</mat-icon> AI Overview</div>
+      <div class="overview-content"> {{summary}}</div>
+      <div class="overview-button">
+          <button mat-button>Learn more</button>
+      </div>
+  </div>
+</div>
+<div class="overview-container" *ngIf="serachResult?.length > 0">
+  <div class="header-container">
+      Search results
+  </div>
+</div>
+<div class="overview-container padding-top">
+  <div class="search-result-parent-container" *ngIf="documents.length>0">
+    <div class="header-container">
+      Documents
+    </div>
+    <div class="search-result-row-container">
+      <div class="search-result" *ngFor="let result of documents" (click)="openNewWindow(result.link)">
+        <div class="title-container">
+            <img src="{{result.link.includes(pdf) ? imageName.get('pdf'): imageName.get('doc')}}" height="30" width="30"/>
+            <div>
+              <div>
+                {{result.title}}
+              </div>
+              <div class="link-container">
+                {{result.displayLink}}
+              </div>
+            </div>
+        </div>
+
+        <div class="description-container">
+            {{result.content.slice(0,200)}}...
+        </div>
+
+        <div class="overview-button">
+          <button mat-button (click)="$event.preventDefault(); previewDocument(result)">View</button>
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
+<div class="overview-container padding-top">
+  <div class="search-result-parent-container" *ngIf="images.length>0">
+    <div class="header-container">
+      Images
+    </div>
+    <div class="search-result-row-container">
+      <div class="search-result" *ngFor="let result of images" (click)="openNewWindow(result.link)">
+        <div class="title-container">
+            <img src="assets/images/img.png" height="30" width="30"/>
+            <div>
+              <div>
+                {{result.title}}
+              </div>
+              <div class="link-container">
+                {{result.displayLink}}
+              </div>
+            </div>
+        </div>
+
+        <div class="description-container">
+            {{result.content.slice(0,200)}}...
+        </div>
+
+        <div class="overview-button">
+          <button mat-button (click)="$event.preventDefault(); previewDocument(result)">View</button>
+        </div>
+    </div>
+    </div>
+
+  </div>
+</div>
