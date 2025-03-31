@@ -27,7 +27,50 @@ class ImagenSearchService:
         LOCATION = "us-central1"
         client = genai.Client(vertexai=True, project=PROJECT_ID, location=LOCATION)
 
-        prompt = f""" {searchRequest.term}"""
+        prompt = f"""Just change the background of the image.
+                it is really important to keep the main figure or object untouched.
+                It is for product catalog. While keeping the main object or figure,
+                the user wants this in the background: {searchRequest.term}"""
+        user_image = Image(image_bytes=searchRequest.user_image)
+
+        try:
+            gemini_responses = client.generate_content(
+                model="gemini-2.0-flash-exp-image-generation",
+                contents=[prompt, user_image],
+                generation_config=types.GenerateContentConfig(
+                    response_modalities=['Image']  # Expecting image responses
+                ),
+                safety_settings=[
+                    {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                    {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                    {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                    {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
+                ],
+                stream=False,  # Assuming you want the full response at once
+            )
+
+            gemini_generated_images: List[ImageGenerationResult] = []
+            for response in gemini_responses:
+                if response.parts:
+                    for part in response.parts:
+                        if isinstance(part.data, types.Blob) and part.data.mime_type.startswith("image/"):
+                            mime_type = part.data.mime_type
+                            image_bytes = part.data.data
+                            encoded_image = base64.b64encode(image_bytes).decode("utf-8")
+                            gemini_generated_images.append(
+                                ImageGenerationResult(
+                                    enhanced_prompt=response.prompt_feedback.text if response.prompt_feedback else prompt,
+                                    rai_filtered_reason=response.prompt_feedback.block_reason if response.prompt_feedback and response.prompt_feedback.blocked else None,
+                                    image=CustomImageResult(
+                                        gcs_uri=None,
+                                        mime_type=mime_type,
+                                        encoded_image=encoded_image,
+                                    ),
+                                )
+                            )
+        except Exception as e:
+            print(f"Error during Gemini 2.0 Flash call: {e}")
+            gemini_generated_images = []
 
         original_image = Image(image_bytes=searchRequest.user_image)
 
@@ -72,7 +115,8 @@ class ImagenSearchService:
 
         # Make sure to convert the image from bytes to encoded string before sending to the frontend
         all_generated_images = (
-            images_entire_image.generated_images
+            gemini_generated_images
+            + images_entire_image.generated_images
             + images_just_background.generated_images
         )
         response = [
